@@ -1,0 +1,12 @@
+package com.rgsinfotech.eventbus.event;
+
+public class WorkRequestEvent extends AbstractEvent {
+
+	private Object workKey; 
+	
+	public WorkRequestEvent() {
+		
+	}
+	
+	public WorkRequestEvent
+}

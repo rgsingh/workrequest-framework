@@ -1,0 +1,5 @@
+package com.rgsinfotech.workqueue.ui;
+
+public class WorkQueueWindow {
+
+}

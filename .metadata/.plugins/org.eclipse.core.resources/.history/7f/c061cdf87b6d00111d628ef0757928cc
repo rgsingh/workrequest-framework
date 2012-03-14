@@ -1,0 +1,55 @@
+package com.rgsinfotech.workqueue.ui;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+public class WorkQueueWindow {
+	public static void main(String[] args) {
+		String nativeLF = UIManager.getSystemLookAndFeelClassName();
+
+		// Install the look and feel
+		try {
+		    UIManager.setLookAndFeel(nativeLF);
+		} catch (InstantiationException e) {
+		} catch (ClassNotFoundException e) {
+		} catch (UnsupportedLookAndFeelException e) {
+		} catch (IllegalAccessException e) {
+		}
+		
+		String title = "Work Queue Injector";
+		JFrame frame = new JFrame(title);
+
+		// Create a component to add to the frame
+		JComponent textArea = new JTextArea();
+
+		// Create an action
+		Action action = new AbstractAction("Inject Data") {
+		    // This method is called when the button is pressed
+		    public void actionPerformed(ActionEvent evt) {
+		        // Perform action...
+		    }
+		};
+
+		// Create the button
+		JButton button = new JButton(action);
+		
+		// Add the component to the frame's content pane;
+		// by default, the content pane has a border layout
+		frame.getContentPane().add(textArea, BorderLayout.CENTER);
+		frame.getContentPane().add(button, BorderLayout.CENTER);
+		// Show the frame
+		int width = 300;
+		int height = 300;
+		frame.setSize(width, height);
+		frame.setVisible(true);
+	}
+}
