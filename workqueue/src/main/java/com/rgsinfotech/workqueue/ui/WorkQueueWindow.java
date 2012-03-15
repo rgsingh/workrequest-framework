@@ -2,6 +2,7 @@ package com.rgsinfotech.workqueue.ui;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.util.concurrent.BlockingQueue;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -19,7 +20,7 @@ public class WorkQueueWindow {
 	
 	public WorkQueueWindow() {}
 	
-	public void show() {
+	public void show(final BlockingQueue<Integer> queue) {
 		String nativeLF = UIManager.getSystemLookAndFeelClassName();
 
 		// Install the look and feel
@@ -48,10 +49,15 @@ public class WorkQueueWindow {
             	dispatcher.addListener(new WorkRequestProcessorListener());
             	
             	String[] values = textArea.getText().split(",");
+            	try {
+            	    // Add some work to the queue; block if the queue is full.
+            	    // Note that null cannot be added to a blocking queue.
+            		for (int i = 0; i < values.length; i++) {
+            	        queue.put(Integer.parseInt(values[i]));
+            	    }
+            	} catch (InterruptedException e) {
+            	} 
 
-            	for (int i = 0; i < values.length; i++) {
-            		dispatcher.dispatchEvent(new WorkRequestEvent(new Integer(values[i])));
-            	}
 		    }
 		};
 

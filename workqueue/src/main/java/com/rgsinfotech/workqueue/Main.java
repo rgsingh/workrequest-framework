@@ -17,13 +17,34 @@ public class Main
 	
     public static void main( String[] args )
     {
-    	WorkQueueWindow window = new WorkQueueWindow();
-    	
-    	window.show();
-    	
     	ExecutorService executor = Executors.newSingleThreadExecutor(new LoggingThreadFactory(THREAD_PREFIX));
     	
-    	// Create a bounded blocking queue of integers
+    	
+    	BlockingQueue<Integer> queue = init(executor);
+
+    	try {
+    	    // Add some work to the queue; block if the queue is full.
+    	    // Note that null cannot be added to a blocking queue.
+    	    for (int i=1; i<100; i++) {
+    	        queue.put(i);
+    	    }
+
+//    	    // Add special end-of-stream markers to terminate the workers
+//    	    for (int i=0; i<workers.length; i++) {
+//    	        queue.put(Worker.NO_MORE_WORK);
+//    	    }
+    	} catch (InterruptedException e) {
+    	}    	
+    	
+    	WorkQueueWindow window = new WorkQueueWindow();
+    	
+    	window.show(queue);
+
+
+    }
+
+	private static BlockingQueue<Integer> init(ExecutorService executor) {
+		// Create a bounded blocking queue of integers
     	final int capacity = 10;
     	BlockingQueue<Integer> queue = new ArrayBlockingQueue<Integer>(capacity);
 
@@ -32,23 +53,9 @@ public class Main
     	final int numWorkers = 2;
     	Worker[] workers = new Worker[numWorkers];
     	for (int i=0; i<workers.length; i++) {
-    	    workers[i] = new Worker(queue);
+    	    workers[i] = new Worker("worker-" + i,queue);
         	executor.submit(workers[i]);   
     	}
-
-    	try {
-    	    // Add some work to the queue; block if the queue is full.
-    	    // Note that null cannot be added to a blocking queue.
-    	    for (int i=0; i<100; i++) {
-    	        queue.put(i);
-    	    }
-
-    	    // Add special end-of-stream markers to terminate the workers
-    	    for (int i=0; i<workers.length; i++) {
-    	        queue.put(Worker.NO_MORE_WORK);
-    	    }
-    	} catch (InterruptedException e) {
-    	}    	
-
-    }
+		return queue;
+	}
 }
