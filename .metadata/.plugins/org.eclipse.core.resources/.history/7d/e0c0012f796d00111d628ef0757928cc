@@ -1,5 +1,0 @@
-package com.rgsinfotech.eventbus.event;
-
-public abstract class AbstractEvent {
-	abstract public Object getKey();
-}
