@@ -12,46 +12,35 @@ import com.rgsinfotech.eventbus.listener.WorkerThreadFailedProcessorListener;
 import com.rgsinfotech.workqueue.service.Service;
 import com.rgsinfotech.workqueue.service.SomeService;
 
-public class Worker implements Runnable {
-    // Special end-of-stream marker. If a worker retrieves
-    // an Integer that equals this marker, the worker will terminate.
-    static final Integer NO_MORE_WORK = new Integer(0);
-    private String name;
-    BlockingQueue<Integer> q;
+public class Worker<T> implements Runnable {
 
-	public Worker(String name, BlockingQueue<Integer> q) {
+    private String name;
+    BlockingQueue<T> q;
+
+	public Worker(String name, BlockingQueue<T> q) {
 		this.name = name;
         this.q = q;
     }
     public void run() {
         try {
             while (true) {
-                // Retrieve an integer; block if the queue is empty
-                Integer x = q.take();
+                // Retrieve a value and block if the queue is empty
+                T x = q.take();
 
-                // Terminate if the end-of-stream marker was retrieved
-                if (x.intValue() == NO_MORE_WORK.intValue()) {
-                	System.out.println(name + " being shutdown!");
-                    break;
-                }
-
-                // Compute the square of x plus 1
-                int y = x * x;
-                y++;
+                // Delegate to a Service that does something with x;
+                Service<T> someService = new SomeService<T>();
+                try {
+					someService.send(x);
+				} catch (ServiceUnavailableException e) {
+		        	EventDispatcher<WorkerThreadFailedEvent> dispatcher = new EventDispatcher<WorkerThreadFailedEvent>();
+		        	dispatcher.addListener(new WorkerThreadFailedProcessorListener());
+		        	dispatcher.dispatchEvent(new WorkerThreadFailedEvent(toString(), e.getMessage()));
+				}
                 
-                if (y % 2 == 0) {
-                	Service service = new SomeService();
-                	try {
-						service.execute();
-					} catch (ServiceUnavailableException e) {
-			        	EventDispatcher<WorkerThreadFailedEvent> dispatcher = new EventDispatcher<WorkerThreadFailedEvent>();
-			        	dispatcher.addListener(new WorkerThreadFailedProcessorListener());
-			        	dispatcher.dispatchEvent(new WorkerThreadFailedEvent(toString(), e.getMessage()));
-					}
-                }
+                
             	EventDispatcher<WorkRequestEvent> dispatcher = new EventDispatcher<WorkRequestEvent>();
             	dispatcher.addListener(new WorkRequestProcessorListener());
-            	dispatcher.dispatchEvent(new WorkRequestEvent(toString(), new Integer(y)));
+            	dispatcher.dispatchEvent(new WorkRequestEvent(toString(), x));
             	
             	Thread.sleep(500);
                 

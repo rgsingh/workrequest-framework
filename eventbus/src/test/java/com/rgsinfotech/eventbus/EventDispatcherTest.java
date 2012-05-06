@@ -5,8 +5,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import com.rgsinfotech.eventbus.api.EventDispatcher;
-import com.rgsinfotech.eventbus.event.WorkRequestEvent;
-import com.rgsinfotech.eventbus.listener.WorkRequestProcessorListener;
+import com.rgsinfotech.eventbus.event.AbstractEvent;
+import com.rgsinfotech.eventbus.listener.Listener;
 
 /**
  * Unit test for EventDispatcher.
@@ -36,13 +36,35 @@ public class EventDispatcherTest
     {
     
     	
-    	EventDispatcher<WorkRequestEvent> dispatcher = new EventDispatcher<WorkRequestEvent>();
-    	dispatcher.addListener(new WorkRequestProcessorListener());
-    	dispatcher.dispatchEvent(new WorkRequestEvent());
+    	EventDispatcher<TestEvent> dispatcher = new EventDispatcher<TestEvent>();
+    	dispatcher.addListener(new TestProcessorListener());
+    	dispatcher.dispatchEvent(new TestEvent());
 
     	    	
     	assertTrue( true );
 
     
+    }
+    
+    private class TestEvent extends AbstractEvent {
+
+		@Override
+		public String getCreatedBy() {
+			return "EventDispatcherTest";
+		}
+
+		@Override
+		public Object getKey() {
+			return "bogus-key";
+		}
+    	
+    }
+    private class TestProcessorListener implements Listener<TestEvent> {
+
+		public void process(TestEvent event) {
+			System.out.println("Executed TestEvent.process()");
+			
+		}
+    	
     }
 }

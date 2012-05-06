@@ -3,24 +3,20 @@ package com.rgsinfotech.workqueue.ui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
 import com.rgsinfotech.eventbus.api.EventDispatcher;
-import com.rgsinfotech.eventbus.event.WorkRequestEvent;
-import com.rgsinfotech.eventbus.listener.WorkRequestProcessorListener;
-import com.rgsinfotech.workqueue.LoggingThreadFactory;
-import com.rgsinfotech.workqueue.Worker;
+import com.rgsinfotech.eventbus.event.WorkQueuePopulatorEvent;
+import com.rgsinfotech.eventbus.listener.WorkQueuePopulatorProcessorListener;
 
 public class MainFrame extends JFrame {
 
-	private static String THREAD_PREFIX = "workqueue";
+	private static final long serialVersionUID = -3809276714057325720L;
 
 	public MainFrame(String title) {
 		super(title);
@@ -43,47 +39,27 @@ public class MainFrame extends JFrame {
 		button.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				int numWorkers = 2;
-				
-				/*
-				 * The effectiveness of LoggingThreadFactory as a catch all for thrown
-				 * Thread exceptions is questionable. I have been unable to force
-				 * its implementation to catch exceptions thrown from any Worker instance.
-				 * The only logical way to inform another thread that a Worker has
-				 * failed is via a listener.
-				 */
-				ExecutorService executor = Executors
-						.newFixedThreadPool(numWorkers, new LoggingThreadFactory(
-								THREAD_PREFIX));
-				BlockingQueue<Integer> queue = init(executor, numWorkers);
+
+				populateWorkQueue(textArea);
+
+			}
+
+			private void populateWorkQueue(final JTextArea textArea) {
 
 				String[] values = textArea.getText().trim().split(",");
-				try {
-					// Add some work to the queue; block if the queue is full.
-					// Note that null cannot be added to a blocking queue.
-					for (int i = 0; i < values.length; i++) {
-						queue.put(Integer.parseInt(values[i]));
-					}
-				} catch (InterruptedException ie) {
-					ie.printStackTrace();
+				List<Integer> data = new ArrayList<Integer>();
+				for (int i = 0; i < values.length; i++) {
+					data.add(Integer.parseInt(values[i]));
 				}
+
+				EventDispatcher<WorkQueuePopulatorEvent> dispatcher = new EventDispatcher<WorkQueuePopulatorEvent>();
+				dispatcher
+						.addListener(new WorkQueuePopulatorProcessorListener());
+				dispatcher.dispatchEvent(new WorkQueuePopulatorEvent(data,
+						getName(), "<some transaction id>"));
 
 			}
 		});
 
-	}
-
-	private static BlockingQueue<Integer> init(ExecutorService executor, int numWorkers) {
-		// Create a bounded blocking queue of integers
-		final int capacity = 10;
-		BlockingQueue<Integer> queue = new ArrayBlockingQueue<Integer>(capacity);
-
-		// Create a set of worker threads
-		Worker[] workers = new Worker[numWorkers];
-		for (int i = 0; i < workers.length; i++) {
-			workers[i] = new Worker("worker-" + i, queue);
-			executor.submit(workers[i]);
-		}
-		return queue;
 	}
 }

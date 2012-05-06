@@ -1,10 +1,10 @@
 package com.rgsinfotech.eventbus.event;
 
 public abstract class AbstractEvent {
-	public String servicedBy;
+	public String createdBy;
 	public Object workKey;
 	
-	abstract public String getServicedBy();
+	abstract public String getCreatedBy();
 	abstract public Object getKey();
 
 }

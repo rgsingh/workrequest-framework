@@ -4,8 +4,8 @@ public class WorkRequestEvent extends AbstractEvent {
 
 	public WorkRequestEvent() {}
 	
-	public WorkRequestEvent(String servicedBy, Object workKey) {
-		this.servicedBy = servicedBy;
+	public WorkRequestEvent(String createdBy, Object workKey) {
+		this.createdBy = createdBy;
 		this.workKey = workKey;
 	}
 	
@@ -15,8 +15,8 @@ public class WorkRequestEvent extends AbstractEvent {
 	}
 
 	@Override
-	public String getServicedBy() {
-		return servicedBy;
+	public String getCreatedBy() {
+		return createdBy;
 	}	
 	
 }

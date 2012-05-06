@@ -4,8 +4,8 @@ public class WorkerThreadFailedEvent extends AbstractEvent {
 
 	public WorkerThreadFailedEvent() {}
 	
-	public WorkerThreadFailedEvent(String servicedBy, Object workKey) {
-		this.servicedBy = servicedBy;
+	public WorkerThreadFailedEvent(String createdBy, Object workKey) {
+		this.createdBy = createdBy;
 		this.workKey = workKey;
 	}
 	
@@ -15,8 +15,8 @@ public class WorkerThreadFailedEvent extends AbstractEvent {
 	}
 
 	@Override
-	public String getServicedBy() {
-		return servicedBy;
+	public String getCreatedBy() {
+		return createdBy;
 	}	
 
 }
