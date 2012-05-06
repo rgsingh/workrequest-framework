@@ -1,10 +1,10 @@
 package com.rgsinfotech.eventbus.event;
 
-public class WorkRequestEvent extends AbstractEvent {
+public class WorkerThreadFailedEvent extends AbstractEvent {
 
-	public WorkRequestEvent() {}
+	public WorkerThreadFailedEvent() {}
 	
-	public WorkRequestEvent(String servicedBy, Object workKey) {
+	public WorkerThreadFailedEvent(String servicedBy, Object workKey) {
 		this.servicedBy = servicedBy;
 		this.workKey = workKey;
 	}
@@ -18,5 +18,5 @@ public class WorkRequestEvent extends AbstractEvent {
 	public String getServicedBy() {
 		return servicedBy;
 	}	
-	
+
 }
