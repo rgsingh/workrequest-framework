@@ -8,6 +8,8 @@ import java.util.concurrent.Executors;
 
 import javax.naming.ServiceUnavailableException;
 
+import org.slf4j.LoggerFactory;
+
 import com.rgsinfotech.workqueue.LoggingThreadFactory;
 import com.rgsinfotech.workqueue.Worker;
 
@@ -54,6 +56,8 @@ public class WorkQueueServerService<T> implements Service<T> {
 			workers[i] = new Worker<T>("worker-" + i, queue);
 			executor.submit(workers[i]);
 		}
+		
+		LoggerFactory.getLogger(getClass().getName()).debug("WorkQueueServerService initialized.");
 	}
 
 	public void shutdown() {

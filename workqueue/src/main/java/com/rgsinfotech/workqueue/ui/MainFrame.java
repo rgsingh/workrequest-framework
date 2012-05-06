@@ -12,7 +12,7 @@ import javax.swing.JTextArea;
 
 import com.rgsinfotech.eventbus.api.EventDispatcher;
 import com.rgsinfotech.eventbus.event.WorkQueuePopulatorEvent;
-import com.rgsinfotech.eventbus.listener.WorkQueuePopulatorProcessorListener;
+import com.rgsinfotech.eventbus.listener.WorkQueuePopulatorListener;
 
 public class MainFrame extends JFrame {
 
@@ -54,7 +54,7 @@ public class MainFrame extends JFrame {
 
 				EventDispatcher<WorkQueuePopulatorEvent> dispatcher = new EventDispatcher<WorkQueuePopulatorEvent>();
 				dispatcher
-						.addListener(new WorkQueuePopulatorProcessorListener());
+						.addListener(new WorkQueuePopulatorListener());
 				dispatcher.dispatchEvent(new WorkQueuePopulatorEvent(data,
 						getName(), "<some transaction id>"));
 

@@ -4,7 +4,7 @@ import org.slf4j.LoggerFactory;
 
 import com.rgsinfotech.eventbus.event.WorkRequestEvent;
 
-public class WorkRequestProcessorListener implements Listener<WorkRequestEvent> {
+public class WorkRequestListener implements Listener<WorkRequestEvent> {
 
 	public void process(WorkRequestEvent event) {
 		System.out.println("WorkRequestEvent.createdBy: "

@@ -7,8 +7,8 @@ import javax.naming.ServiceUnavailableException;
 import com.rgsinfotech.eventbus.api.EventDispatcher;
 import com.rgsinfotech.eventbus.event.WorkRequestEvent;
 import com.rgsinfotech.eventbus.event.WorkerThreadFailedEvent;
-import com.rgsinfotech.eventbus.listener.WorkRequestProcessorListener;
-import com.rgsinfotech.eventbus.listener.WorkerThreadFailedProcessorListener;
+import com.rgsinfotech.eventbus.listener.WorkRequestListener;
+import com.rgsinfotech.eventbus.listener.WorkerThreadFailedListener;
 import com.rgsinfotech.workqueue.service.Service;
 import com.rgsinfotech.workqueue.service.SomeService;
 
@@ -33,13 +33,13 @@ public class Worker<T> implements Runnable {
 					someService.send(x);
 				} catch (ServiceUnavailableException e) {
 		        	EventDispatcher<WorkerThreadFailedEvent> dispatcher = new EventDispatcher<WorkerThreadFailedEvent>();
-		        	dispatcher.addListener(new WorkerThreadFailedProcessorListener());
+		        	dispatcher.addListener(new WorkerThreadFailedListener());
 		        	dispatcher.dispatchEvent(new WorkerThreadFailedEvent(toString(), e.getMessage()));
 				}
                 
                 
             	EventDispatcher<WorkRequestEvent> dispatcher = new EventDispatcher<WorkRequestEvent>();
-            	dispatcher.addListener(new WorkRequestProcessorListener());
+            	dispatcher.addListener(new WorkRequestListener());
             	dispatcher.dispatchEvent(new WorkRequestEvent(toString(), x));
             	
             	Thread.sleep(500);
@@ -47,7 +47,7 @@ public class Worker<T> implements Runnable {
             }
         } catch (InterruptedException e) {
         	EventDispatcher<WorkerThreadFailedEvent> dispatcher = new EventDispatcher<WorkerThreadFailedEvent>();
-        	dispatcher.addListener(new WorkerThreadFailedProcessorListener());
+        	dispatcher.addListener(new WorkerThreadFailedListener());
         	dispatcher.dispatchEvent(new WorkerThreadFailedEvent(toString(), e.getMessage()));
         }
     }

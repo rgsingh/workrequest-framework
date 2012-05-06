@@ -4,7 +4,7 @@ import org.slf4j.LoggerFactory;
 
 import com.rgsinfotech.eventbus.event.WorkerThreadFailedEvent;
 
-public class WorkerThreadFailedProcessorListener implements
+public class WorkerThreadFailedListener implements
 		Listener<WorkerThreadFailedEvent> {
 	public void process(WorkerThreadFailedEvent event) {
 		System.out.println("WorkerThreadFailedEvent.createdBy: "

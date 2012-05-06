@@ -7,24 +7,19 @@ import javax.naming.ServiceUnavailableException;
 import org.slf4j.LoggerFactory;
 
 import com.rgsinfotech.eventbus.event.WorkQueuePopulatorEvent;
-import com.rgsinfotech.workqueue.service.WorkQueueServerService;
+import com.rgsinfotech.eventbus.listener.WorkQueueServerStartListener.WorkQueueServerServiceHolder;
 
-public class WorkQueuePopulatorProcessorListener implements
+public class WorkQueuePopulatorListener implements
 		Listener<WorkQueuePopulatorEvent> {
 
-	private static class WorkQueueServerServiceHolder {
-		public static final WorkQueueServerService<Integer> INSTANCE = new WorkQueueServerService<Integer>();
-	}
+
 	
 	@SuppressWarnings("unchecked")
 	public void process(WorkQueuePopulatorEvent event) {
 		
-		WorkQueueServerService<Integer> queueServerService = WorkQueueServerServiceHolder.INSTANCE;
-		
-		
 		List<Integer> data = (List<Integer>) event.getCollection();
 		try {
-			queueServerService.send(data);	
+			WorkQueueServerServiceHolder.INSTANCE.send(data);	
 			
 		} catch (ServiceUnavailableException e) {
 			LoggerFactory.getLogger(getClass().getName()).error(e.getMessage());
