@@ -26,7 +26,6 @@ public class WorkQueueServerService<T> implements Service<T> {
 			THREAD_PREFIX));
 	
 	public WorkQueueServerService() {
-		init();
 	}
 
 	public void send(T data) throws ServiceUnavailableException {
@@ -34,7 +33,7 @@ public class WorkQueueServerService<T> implements Service<T> {
 	}
 	
 	public void send(List<T> data) throws ServiceUnavailableException {
-		
+		LoggerFactory.getLogger(getClass().getName()).debug("WorkQueueServerService instance executing: " + this);
 		if (data instanceof List) {		
 			for (T value : data) {
 				try {
@@ -64,6 +63,8 @@ public class WorkQueueServerService<T> implements Service<T> {
 		executor.shutdown();	
 		queue.clear();
 	}
+
+	public void afterPropertiesSet() throws Exception {}
 
 
 }

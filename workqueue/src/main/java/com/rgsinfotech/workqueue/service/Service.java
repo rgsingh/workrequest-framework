@@ -4,7 +4,9 @@ import java.util.List;
 
 import javax.naming.ServiceUnavailableException;
 
-public interface Service<T> {
+import org.springframework.beans.factory.InitializingBean;
+
+public interface Service<T> extends InitializingBean {
 
 	public void init();
 	public void send(T data) throws ServiceUnavailableException;

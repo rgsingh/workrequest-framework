@@ -36,7 +36,7 @@ public class EventDispatcherTest
     {
     
     	
-    	EventDispatcher<TestEvent> dispatcher = new EventDispatcher<TestEvent>();
+    	EventDispatcher<TestEvent> dispatcher = new EventDispatcher<TestEvent>(TestEvent.class);
     	dispatcher.addListener(new TestProcessorListener());
     	dispatcher.dispatchEvent(new TestEvent());
 

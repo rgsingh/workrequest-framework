@@ -1,5 +1,5 @@
-# Java bytecode pattern
-*.class
+# Bytecode and distributable artifacts
+target/
 
 # Generic file patterns
 *.lock
@@ -10,3 +10,10 @@
 
 # Eclipse metadata
 .metadata/
+
+# Eclipse project and other 
+.classpath
+.project
+.settings/
+
+

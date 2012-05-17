@@ -31,6 +31,10 @@ public class SomeService<T> implements Service<T> {
 		
 	}
 
+	public void afterPropertiesSet() throws Exception {
+		
+	}
+
 	
 	
 }

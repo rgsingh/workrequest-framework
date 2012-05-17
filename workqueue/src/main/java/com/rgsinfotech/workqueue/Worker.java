@@ -32,13 +32,13 @@ public class Worker<T> implements Runnable {
                 try {
 					someService.send(x);
 				} catch (ServiceUnavailableException e) {
-		        	EventDispatcher<WorkerThreadFailedEvent> dispatcher = new EventDispatcher<WorkerThreadFailedEvent>();
+		        	EventDispatcher<WorkerThreadFailedEvent> dispatcher = new EventDispatcher<WorkerThreadFailedEvent>(WorkerThreadFailedEvent.class);
 		        	dispatcher.addListener(new WorkerThreadFailedListener());
 		        	dispatcher.dispatchEvent(new WorkerThreadFailedEvent(toString(), e.getMessage()));
 				}
                 
                 
-            	EventDispatcher<WorkRequestEvent> dispatcher = new EventDispatcher<WorkRequestEvent>();
+            	EventDispatcher<WorkRequestEvent> dispatcher = new EventDispatcher<WorkRequestEvent>(WorkRequestEvent.class);
             	dispatcher.addListener(new WorkRequestListener());
             	dispatcher.dispatchEvent(new WorkRequestEvent(toString(), x));
             	
@@ -46,7 +46,7 @@ public class Worker<T> implements Runnable {
                 
             }
         } catch (InterruptedException e) {
-        	EventDispatcher<WorkerThreadFailedEvent> dispatcher = new EventDispatcher<WorkerThreadFailedEvent>();
+        	EventDispatcher<WorkerThreadFailedEvent> dispatcher = new EventDispatcher<WorkerThreadFailedEvent>(WorkerThreadFailedEvent.class);
         	dispatcher.addListener(new WorkerThreadFailedListener());
         	dispatcher.dispatchEvent(new WorkerThreadFailedEvent(toString(), e.getMessage()));
         }

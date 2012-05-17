@@ -2,12 +2,12 @@ package com.rgsinfotech.eventbus.event;
 
 import java.util.Collection;
 
-public class WorkQueuePopulatorEvent extends AbstractEvent implements CollectionAwareEvent {
+public class WorkQueueIntegerPopulatorEvent extends AbstractEvent implements CollectionAwareEvent {
 	private Collection data;
 	
-	public WorkQueuePopulatorEvent() {}
+	public WorkQueueIntegerPopulatorEvent() {}
 	
-	public WorkQueuePopulatorEvent(Collection data, String createdBy, Object workKey) {
+	public WorkQueueIntegerPopulatorEvent(Collection data, String createdBy, Object workKey) {
 		this.data = data;
 		this.createdBy = createdBy;
 		this.workKey = workKey;

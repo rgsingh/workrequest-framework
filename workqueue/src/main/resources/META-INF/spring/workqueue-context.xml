@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	You under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+
+	<context:annotation-config />
+
+	<bean id="workQueueWindow" class="com.rgsinfotech.workqueue.ui.WorkQueueWindow"
+		init-method="show">
+		<property name="mainFrame" ref="mainFrame" />
+	</bean>
+	
+	<bean id="mainFrame" class="com.rgsinfotech.workqueue.ui.MainFrame">
+		<constructor-arg index="0"><value>Work Queue Injector</value></constructor-arg>
+		<property name="integerPopulatorEventDispatcher" ref="workQueueIntegerPopulatorEventDispatcher"/>
+		<property name="integerPopulatorListener" ref="integerPopulatorListener" />
+	</bean>
+
+	<bean id="workQueueServerService"
+		class="com.rgsinfotech.workqueue.service.WorkQueueServerService"
+		init-method="init" destroy-method="shutdown" />
+
+	<bean id="integerPopulatorListener"
+		class="com.rgsinfotech.eventbus.listener.WorkQueueIntegerPopulatorListener">
+		<property name="workQueueServerService" ref="workQueueServerService" />
+	</bean>
+
+	<bean id="workQueueIntegerPopulatorEventDispatcher" class="com.rgsinfotech.eventbus.api.EventDispatcher">
+		<description>
+        <![CDATA[
+            Definition of Generic EventDispatcher
+        ]]>
+		</description>
+		<constructor-arg>
+			<value>com.rgsinfotech.eventbus.event.WorkQueueIntegerPopulatorEvent
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<!--  bean id="simpleEventProducer" class="com.rgsinfotech.workqueue.ui.SimpleEventProducer">
+		<property name="integerPopulatorListener" ref="integerPopulatorListener" />
+		<property name="eventDispatcher" ref="workQueueIntegerPopulatorEventDispatcher" />
+	</bean -->
+
+</beans>
