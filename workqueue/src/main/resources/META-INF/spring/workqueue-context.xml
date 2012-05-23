@@ -27,10 +27,15 @@
 	
 	<bean id="mainFrame" class="com.rgsinfotech.workqueue.ui.MainFrame">
 		<constructor-arg index="0"><value>Work Queue Injector</value></constructor-arg>
+		<property name="injectionWorkerProxy" ref="injectionWorkerProxy" />
+	</bean>
+	
+	<bean id="injectionWorkerProxy" class="com.rgsinfotech.workqueue.ui.WorkInjectionWorkerProxy" 
+		init-method="init" destroy-method="cancel">
 		<property name="integerPopulatorEventDispatcher" ref="workQueueIntegerPopulatorEventDispatcher"/>
 		<property name="integerPopulatorListener" ref="integerPopulatorListener" />
 	</bean>
-
+	
 	<bean id="workQueueServerService"
 		class="com.rgsinfotech.workqueue.service.WorkQueueServerService"
 		init-method="init" destroy-method="shutdown" />
