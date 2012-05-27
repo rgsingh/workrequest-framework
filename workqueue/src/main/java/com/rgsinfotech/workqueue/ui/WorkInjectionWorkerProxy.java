@@ -1,41 +1,35 @@
 package com.rgsinfotech.workqueue.ui;
 
-import com.rgsinfotech.eventbus.api.EventDispatcher;
-import com.rgsinfotech.eventbus.event.WorkQueueIntegerPopulatorEvent;
-import com.rgsinfotech.eventbus.listener.Listener;
+import com.rgsinfotech.workqueue.service.WorkInjectionService;
 
+/*
+ * Wraps a SwingWorker (WorkInjectionWorker) to handle UI event handling and dispatch.
+ */
 public class WorkInjectionWorkerProxy implements WorkerLifecycleProxy {
 
 	private WorkInjectionWorker injectionWorker;
-	private EventDispatcher<WorkQueueIntegerPopulatorEvent> integerPopulatorEventDispatcher;
-	private Listener<WorkQueueIntegerPopulatorEvent> integerPopulatorListener;
-	
+	private WorkInjectionService<String> workInjectionService;
+
 	public WorkInjectionWorkerProxy() {
-		
+
 	}
 
 	public void setInjectedWork(String injectedWork) {
 		injectionWorker.setInjectedWork(injectedWork);
 	}
 
-	public void setIntegerPopulatorEventDispatcher(
-			EventDispatcher<WorkQueueIntegerPopulatorEvent> integerPopulatorEventDispatcher) {
-		this.integerPopulatorEventDispatcher = integerPopulatorEventDispatcher;
-		
+	public WorkInjectionService<String> getWorkInjectionService() {
+		return workInjectionService;
 	}
 
-
-	public void setIntegerPopulatorListener(
-			Listener<WorkQueueIntegerPopulatorEvent> integerPopulatorListener) {
-		this.integerPopulatorListener = integerPopulatorListener;
-		
-	}	
+	public void setWorkInjectionService(
+			WorkInjectionService<String> workInjectionService) {
+		this.workInjectionService = workInjectionService;
+	}
 
 	public void init() {
 		injectionWorker = new WorkInjectionWorker();
-		injectionWorker.setIntegerPopulatorEventDispatcher(integerPopulatorEventDispatcher); 
-		injectionWorker.setIntegerPopulatorListener(integerPopulatorListener);
-
+		injectionWorker.setWorkInjectionService(workInjectionService);
 	}
 
 	public void execute() {

@@ -1,65 +1,56 @@
 package com.rgsinfotech.workqueue.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import javax.naming.ServiceUnavailableException;
 import javax.swing.SwingWorker;
 
-import com.rgsinfotech.eventbus.api.EventDispatcher;
-import com.rgsinfotech.eventbus.event.WorkQueueIntegerPopulatorEvent;
-import com.rgsinfotech.eventbus.listener.Listener;
+import org.slf4j.LoggerFactory;
 
+import com.rgsinfotech.workqueue.service.WorkInjectionService;
+
+/*
+ * This class can only be executed once. A new instance will need to be 
+ * created in order to invoke the execute method.
+ */
 public class WorkInjectionWorker extends SwingWorker<Void, Void> {
 
 	private String injectedWork;
-	private EventDispatcher<WorkQueueIntegerPopulatorEvent> integerPopulatorEventDispatcher;
-	private Listener<WorkQueueIntegerPopulatorEvent> integerPopulatorListener;
-
+	private WorkInjectionService<String> workInjectionService;
 
 	@Override
 	protected Void doInBackground() throws Exception {
 
 		populateWorkQueue();
-		
+
 		return null;
 	}
 
 	private void populateWorkQueue() {
 
-		String[] values = injectedWork.split(",");
-		List<Integer> data = new ArrayList<Integer>();
-		for (int i = 0; i < values.length; i++) {
-			data.add(Integer.parseInt(values[i]));
+		try {
+			getWorkInjectionService().send(getInjectedWork());
+		} catch (ServiceUnavailableException e) {
+			LoggerFactory
+					.getLogger(getClass().getName())
+					.error("WorkInjectionWorker error sending data to WorkInjectionService.",
+							e);
 		}
 
-		getIntegerPopulatorEventDispatcher().addListener(
-				getIntegerPopulatorListener());
-
-		getIntegerPopulatorEventDispatcher().dispatchEvent(
-				new WorkQueueIntegerPopulatorEvent(data, getClass().getName(),
-						"<some transaction id>"));
-
 	}
-	
+
+	public String getInjectedWork() {
+		return injectedWork;
+	}
+
 	public void setInjectedWork(String injectedWork) {
 		this.injectedWork = injectedWork;
 	}
 
-	public EventDispatcher<WorkQueueIntegerPopulatorEvent> getIntegerPopulatorEventDispatcher() {
-		return integerPopulatorEventDispatcher;
+	public WorkInjectionService<String> getWorkInjectionService() {
+		return workInjectionService;
 	}
 
-	public void setIntegerPopulatorEventDispatcher(
-			EventDispatcher<WorkQueueIntegerPopulatorEvent> integerPopulatorEventDispatcher) {
-		this.integerPopulatorEventDispatcher = integerPopulatorEventDispatcher;
-	}
-
-	public Listener<WorkQueueIntegerPopulatorEvent> getIntegerPopulatorListener() {
-		return integerPopulatorListener;
-	}
-
-	public void setIntegerPopulatorListener(
-			Listener<WorkQueueIntegerPopulatorEvent> integerPopulatorListener) {
-		this.integerPopulatorListener = integerPopulatorListener;
+	public void setWorkInjectionService(
+			WorkInjectionService<String> workInjectionService) {
+		this.workInjectionService = workInjectionService;
 	}
 }

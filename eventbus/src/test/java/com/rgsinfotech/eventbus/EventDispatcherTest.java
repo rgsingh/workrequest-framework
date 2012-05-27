@@ -34,16 +34,9 @@ public class EventDispatcherTest
 
     public void testMainSuccess()
     {
-    
-    	
     	EventDispatcher<TestEvent> dispatcher = new EventDispatcher<TestEvent>(TestEvent.class);
     	dispatcher.addListener(new TestProcessorListener());
     	dispatcher.dispatchEvent(new TestEvent());
-
-    	    	
-    	assertTrue( true );
-
-    
     }
     
     private class TestEvent extends AbstractEvent {
@@ -62,6 +55,8 @@ public class EventDispatcherTest
     private class TestProcessorListener implements Listener<TestEvent> {
 
 		public void process(TestEvent event) {
+			assertNotNull(event);
+			assertEquals("bogus-key", event.getKey());
 			System.out.println("Executed TestEvent.process()");
 			
 		}

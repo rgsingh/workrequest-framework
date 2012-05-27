@@ -17,34 +17,25 @@
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-
 	<context:annotation-config />
 
 	<bean id="workQueueWindow" class="com.rgsinfotech.workqueue.ui.WorkQueueWindow"
 		init-method="show">
 		<property name="mainFrame" ref="mainFrame" />
 	</bean>
-	
+
 	<bean id="mainFrame" class="com.rgsinfotech.workqueue.ui.MainFrame">
-		<constructor-arg index="0"><value>Work Queue Injector</value></constructor-arg>
+		<constructor-arg index="0">
+			<value>Work Queue Injector</value>
+		</constructor-arg>
 		<property name="injectionWorkerProxy" ref="injectionWorkerProxy" />
 	</bean>
-	
-	<bean id="injectionWorkerProxy" class="com.rgsinfotech.workqueue.ui.WorkInjectionWorkerProxy" 
+
+	<bean id="injectionWorkerProxy" class="com.rgsinfotech.workqueue.ui.WorkInjectionWorkerProxy"
 		init-method="init" destroy-method="cancel">
-		<property name="integerPopulatorEventDispatcher" ref="workQueueIntegerPopulatorEventDispatcher"/>
-		<property name="integerPopulatorListener" ref="integerPopulatorListener" />
-	</bean>
+		<property name="workInjectionService" ref="workInjectionService" />		
+	</bean>	
 	
-	<bean id="workQueueServerService"
-		class="com.rgsinfotech.workqueue.service.WorkQueueServerService"
-		init-method="init" destroy-method="shutdown" />
-
-	<bean id="integerPopulatorListener"
-		class="com.rgsinfotech.eventbus.listener.WorkQueueIntegerPopulatorListener">
-		<property name="workQueueServerService" ref="workQueueServerService" />
-	</bean>
-
 	<bean id="workQueueIntegerPopulatorEventDispatcher" class="com.rgsinfotech.eventbus.api.EventDispatcher">
 		<description>
         <![CDATA[
@@ -56,10 +47,23 @@
 			</value>
 		</constructor-arg>
 	</bean>
-
-	<!--  bean id="simpleEventProducer" class="com.rgsinfotech.workqueue.ui.SimpleEventProducer">
-		<property name="integerPopulatorListener" ref="integerPopulatorListener" />
-		<property name="eventDispatcher" ref="workQueueIntegerPopulatorEventDispatcher" />
-	</bean -->
-
+	
+	<bean id="integerPopulatorListener"
+		class="com.rgsinfotech.eventbus.listener.WorkQueueIntegerPopulatorListener">
+		<property name="workQueueServerService" ref="workQueueServerService" />
+	</bean>
+	
+	<bean id="workQueueServerService"
+		class="com.rgsinfotech.workqueue.service.WorkQueueServerService"
+		init-method="init" destroy-method="shutdown">
+		<property name="numWorkers" value="5" />
+	</bean>
+		
+	<bean id="workInjectionService"
+		class="com.rgsinfotech.workqueue.service.WorkInjectionService"
+		init-method="init" destroy-method="shutdown">
+		<property name="integerPopulatorEventDispatcher" ref="workQueueIntegerPopulatorEventDispatcher" />
+		<property name="integerPopulatorListener" ref="integerPopulatorListener" />	
+	</bean>	
+			
 </beans>

@@ -14,41 +14,50 @@ import com.rgsinfotech.workqueue.service.SomeService;
 
 public class Worker<T> implements Runnable {
 
-    private String name;
-    BlockingQueue<T> q;
+	private String name;
+	BlockingQueue<T> q;
 
 	public Worker(String name, BlockingQueue<T> q) {
 		this.name = name;
-        this.q = q;
-    }
-    public void run() {
-        try {
-            while (true) {
-                // Retrieve a value and block if the queue is empty
-                T x = q.take();
+		this.q = q;
+	}
 
-                // Delegate to a Service that does something with x;
-                Service<T> someService = new SomeService<T>();
-                try {
+	public String getName() {
+		return name;
+	}
+
+	public void run() {
+		try {
+			while (true) {
+				// Retrieve a value and block if the queue is empty
+				T x = q.take();
+
+				// Delegate to a Service that does something with x;
+				Service<T> someService = new SomeService<T>();
+				try {
 					someService.send(x);
 				} catch (ServiceUnavailableException e) {
-		        	EventDispatcher<WorkerThreadFailedEvent> dispatcher = new EventDispatcher<WorkerThreadFailedEvent>(WorkerThreadFailedEvent.class);
-		        	dispatcher.addListener(new WorkerThreadFailedListener());
-		        	dispatcher.dispatchEvent(new WorkerThreadFailedEvent(toString(), e.getMessage()));
+					EventDispatcher<WorkerThreadFailedEvent> dispatcher = new EventDispatcher<WorkerThreadFailedEvent>(
+							WorkerThreadFailedEvent.class);
+					dispatcher.addListener(new WorkerThreadFailedListener());
+					dispatcher.dispatchEvent(new WorkerThreadFailedEvent(
+							toString(), e.getMessage()));
 				}
-                
-                
-            	EventDispatcher<WorkRequestEvent> dispatcher = new EventDispatcher<WorkRequestEvent>(WorkRequestEvent.class);
-            	dispatcher.addListener(new WorkRequestListener());
-            	dispatcher.dispatchEvent(new WorkRequestEvent(toString(), x));
-            	
-            	Thread.sleep(500);
-                
-            }
-        } catch (InterruptedException e) {
-        	EventDispatcher<WorkerThreadFailedEvent> dispatcher = new EventDispatcher<WorkerThreadFailedEvent>(WorkerThreadFailedEvent.class);
-        	dispatcher.addListener(new WorkerThreadFailedListener());
-        	dispatcher.dispatchEvent(new WorkerThreadFailedEvent(toString(), e.getMessage()));
-        }
-    }
+
+				EventDispatcher<WorkRequestEvent> dispatcher = new EventDispatcher<WorkRequestEvent>(
+						WorkRequestEvent.class);
+				dispatcher.addListener(new WorkRequestListener());
+				dispatcher.dispatchEvent(new WorkRequestEvent(toString(), x));
+
+				Thread.sleep(500);
+
+			}
+		} catch (InterruptedException e) {
+			EventDispatcher<WorkerThreadFailedEvent> dispatcher = new EventDispatcher<WorkerThreadFailedEvent>(
+					WorkerThreadFailedEvent.class);
+			dispatcher.addListener(new WorkerThreadFailedListener());
+			dispatcher.dispatchEvent(new WorkerThreadFailedEvent(toString(), e
+					.getMessage()));
+		}
+	}
 }

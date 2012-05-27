@@ -10,13 +10,17 @@ public class EventDispatcher<T extends AbstractEvent> {
 	private Class<T> type;
 
 	private final List<Listener<? super T>> listeners = new CopyOnWriteArrayList<Listener<? super T>>();
-	
+
 	public EventDispatcher(Class<T> type) {
 		this.type = type;
 	}
-	
+
+	public Class<T> getType() {
+		return type;
+	}
+
 	public void addListener(Listener<? super T> listener) {
-		
+
 		if (!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
