@@ -7,17 +7,17 @@ import javax.naming.ServiceUnavailableException;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-import com.rgsinfotech.eventbus.event.WorkQueueIntegerPopulatorEvent;
+import com.rgsinfotech.eventbus.event.WorkQueueServerSenderEvent;
 import com.rgsinfotech.workqueue.service.WorkQueueServerService;
 
-public class WorkQueueIntegerPopulatorListener implements
-		Listener<WorkQueueIntegerPopulatorEvent>, InitializingBean   {
+public class WorkQueueServerSenderListener implements
+		Listener<WorkQueueServerSenderEvent>, InitializingBean   {
 
 	
 	private WorkQueueServerService<Integer> workQueueServerService;
 	
 	
-	public WorkQueueIntegerPopulatorListener() {
+	public WorkQueueServerSenderListener() {
 		
 	}
 	
@@ -35,7 +35,7 @@ public class WorkQueueIntegerPopulatorListener implements
 
 
 	@SuppressWarnings("unchecked")
-	public void process(WorkQueueIntegerPopulatorEvent event) {
+	public void process(WorkQueueServerSenderEvent event) {
 		
 		List<Integer> data = (List<Integer>) event.getCollection();
 		try {

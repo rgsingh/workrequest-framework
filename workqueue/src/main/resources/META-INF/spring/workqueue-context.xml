@@ -36,20 +36,20 @@
 		<property name="workInjectionService" ref="workInjectionService" />		
 	</bean>	
 	
-	<bean id="workQueueIntegerPopulatorEventDispatcher" class="com.rgsinfotech.eventbus.api.EventDispatcher">
+	<bean id="workQueueServerSenderEventDispatcher" class="com.rgsinfotech.eventbus.api.EventDispatcher">
 		<description>
         <![CDATA[
             Definition of Generic EventDispatcher
         ]]>
 		</description>
 		<constructor-arg>
-			<value>com.rgsinfotech.eventbus.event.WorkQueueIntegerPopulatorEvent
+			<value>com.rgsinfotech.eventbus.event.WorkQueueServerSenderEvent
 			</value>
 		</constructor-arg>
 	</bean>
 	
-	<bean id="integerPopulatorListener"
-		class="com.rgsinfotech.eventbus.listener.WorkQueueIntegerPopulatorListener">
+	<bean id="workQueueServerSenderListener"
+		class="com.rgsinfotech.eventbus.listener.WorkQueueServerSenderListener">
 		<property name="workQueueServerService" ref="workQueueServerService" />
 	</bean>
 	
@@ -62,8 +62,8 @@
 	<bean id="workInjectionService"
 		class="com.rgsinfotech.workqueue.service.WorkInjectionService"
 		init-method="init" destroy-method="shutdown">
-		<property name="integerPopulatorEventDispatcher" ref="workQueueIntegerPopulatorEventDispatcher" />
-		<property name="integerPopulatorListener" ref="integerPopulatorListener" />	
+		<property name="workQueueServerSenderEventDispatcher" ref="workQueueServerSenderEventDispatcher" />
+		<property name="workQueueServerSenderListener" ref="workQueueServerSenderListener" />	
 	</bean>	
 			
 </beans>

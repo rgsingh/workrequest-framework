@@ -6,18 +6,34 @@ import java.util.List;
 import javax.naming.ServiceUnavailableException;
 
 import com.rgsinfotech.eventbus.api.EventDispatcher;
-import com.rgsinfotech.eventbus.event.WorkQueueIntegerPopulatorEvent;
+import com.rgsinfotech.eventbus.event.WorkQueueServerSenderEvent;
 import com.rgsinfotech.eventbus.listener.Listener;
 
+
+/**
+ * Responsible for consuming a DTO representing the data to be provided to this service
+ * which is used to perform work. In this case, work is to delegate to a simple event
+ * dispatching mechanism which will in turn notify a daemon service via a listener interface.
+ * 
+ * @author Rai Singh
+ *
+ * 
+ */
 public class WorkInjectionService<T> implements Service<String> {
 
-	private EventDispatcher<WorkQueueIntegerPopulatorEvent> integerPopulatorEventDispatcher;
-	private Listener<WorkQueueIntegerPopulatorEvent> integerPopulatorListener;
+	private EventDispatcher<WorkQueueServerSenderEvent> workQueueServerSenderEventDispatcher;
+	private Listener<WorkQueueServerSenderEvent> workQueueServerSenderListener;
 
 	public void init() {
 
 	}
 
+	/**
+	 * Method invoked which indirectly interacts with a corresponding server service via
+	 * an internal event bus.
+	 * 
+	 * @param data The raw DTO payload which is post-processed within this method.
+	 */
 	public void send(String data) throws ServiceUnavailableException {
 
 		String[] values = data.split(",");
@@ -26,11 +42,11 @@ public class WorkInjectionService<T> implements Service<String> {
 			dataSplit.add(Integer.parseInt(values[i]));
 		}
 
-		getIntegerPopulatorEventDispatcher().addListener(
-				getIntegerPopulatorListener());
+		getWorkQueueServerSenderEventDispatcher().addListener(
+				getWorkQueueServerSenderListener());
 
-		getIntegerPopulatorEventDispatcher().dispatchEvent(
-				new WorkQueueIntegerPopulatorEvent(dataSplit, getClass()
+		getWorkQueueServerSenderEventDispatcher().dispatchEvent(
+				new WorkQueueServerSenderEvent(dataSplit, getClass()
 						.getName(), "<some transaction id>"));
 
 	}
@@ -47,22 +63,22 @@ public class WorkInjectionService<T> implements Service<String> {
 
 	}
 
-	public EventDispatcher<WorkQueueIntegerPopulatorEvent> getIntegerPopulatorEventDispatcher() {
-		return integerPopulatorEventDispatcher;
+	public EventDispatcher<WorkQueueServerSenderEvent> getWorkQueueServerSenderEventDispatcher() {
+		return workQueueServerSenderEventDispatcher;
 	}
 
-	public void setIntegerPopulatorEventDispatcher(
-			EventDispatcher<WorkQueueIntegerPopulatorEvent> integerPopulatorEventDispatcher) {
-		this.integerPopulatorEventDispatcher = integerPopulatorEventDispatcher;
+	public void setWorkQueueServerSenderEventDispatcher(
+			EventDispatcher<WorkQueueServerSenderEvent> workQueueServerSenderEventDispatcher) {
+		this.workQueueServerSenderEventDispatcher = workQueueServerSenderEventDispatcher;
 	}
 
-	public Listener<WorkQueueIntegerPopulatorEvent> getIntegerPopulatorListener() {
-		return integerPopulatorListener;
+	public Listener<WorkQueueServerSenderEvent> getWorkQueueServerSenderListener() {
+		return workQueueServerSenderListener;
 	}
 
-	public void setIntegerPopulatorListener(
-			Listener<WorkQueueIntegerPopulatorEvent> integerPopulatorListener) {
-		this.integerPopulatorListener = integerPopulatorListener;
+	public void setWorkQueueServerSenderListener(
+			Listener<WorkQueueServerSenderEvent> workQueueServerSenderListener) {
+		this.workQueueServerSenderListener = workQueueServerSenderListener;
 	}
 
 }
