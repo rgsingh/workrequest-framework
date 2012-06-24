@@ -8,7 +8,12 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
-public class MainFrame extends JFrame {
+import org.slf4j.LoggerFactory;
+
+import com.rgsinfotech.eventbus.event.Event;
+import com.rgsinfotech.eventbus.listener.Listener;
+
+public class MainFrame extends JFrame implements Listener<Event> {
 
 	private static final long serialVersionUID = -3809276714057325720L;
 
@@ -49,8 +54,20 @@ public class MainFrame extends JFrame {
 		return injectionWorkerProxy;
 	}
 
-	public void setInjectionWorkerProxy(WorkInjectionWorkerProxy injectionWorkerProxy) {
+	public void setInjectionWorkerProxy(
+			WorkInjectionWorkerProxy injectionWorkerProxy) {
 		this.injectionWorkerProxy = injectionWorkerProxy;
+	}
+
+	@Override
+	public void process(Event event) {
+		LoggerFactory.getLogger(getClass().getName()).debug(
+				"Received WorkQueueServerResultEvent");
+	}
+
+	@Override
+	public void init() {
+
 	}
 
 }

@@ -1,34 +1,62 @@
 package com.rgsinfotech.eventbus.api;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.rgsinfotech.eventbus.event.AbstractEvent;
 import com.rgsinfotech.eventbus.listener.Listener;
 
 public class EventDispatcher<T extends AbstractEvent> {
-	private Class<T> type;
+	// private Class<T> type;
 
-	private final List<Listener<? super T>> listeners = new CopyOnWriteArrayList<Listener<? super T>>();
+	private final Map<String, Listener<? super T>> listeners = new ConcurrentHashMap<String, Listener<? super T>>();
 
-	public EventDispatcher(Class<T> type) {
-		this.type = type;
+	private EventDispatcher() {
+
 	}
 
-	public Class<T> getType() {
-		return type;
+	private static class EventDispatcherHolder {
+		@SuppressWarnings("unchecked")
+		public static final EventDispatcher<? extends AbstractEvent> instance = new EventDispatcher();
 	}
 
-	public void addListener(Listener<? super T> listener) {
+	@SuppressWarnings("rawtypes")
+	public static EventDispatcher getInstance() {
+		return EventDispatcherHolder.instance;
+	}
 
-		if (!listeners.contains(listener)) {
-			listeners.add(listener);
+	// public EventDispatcher(Class<T> type) {
+	// this.type = type;
+	// }
+	//
+	// public Class<T> getType() {
+	// return type;
+	// }
+
+	public void addListener(String eventDef, Listener<? super T> listener) {
+
+		if (!listeners.containsKey(eventDef)) {
+			listeners.put(eventDef, listener);
 		}
 	}
 
+	public void removeListener(String eventDef) {
+
+		if (listeners.containsKey(eventDef)) {
+			listeners.remove(eventDef);
+		}
+
+	}
+
 	public void dispatchEvent(T event) {
-		for (Listener<? super T> listener : listeners)
-			listener.process(event);
+		for (Map.Entry<String, Listener<? super T>> entry : listeners
+				.entrySet()) {
+			String eventDef = entry.getKey();
+			Listener<? super T> listener = entry.getValue();
+			if (event.getKey().equalsIgnoreCase(eventDef)) {
+				listener.process(event);
+			}
+		}
 	}
 
 }

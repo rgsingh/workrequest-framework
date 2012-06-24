@@ -36,18 +36,6 @@
 		<property name="workInjectionService" ref="workInjectionService" />		
 	</bean>	
 	
-	<bean id="workQueueServerSenderEventDispatcher" class="com.rgsinfotech.eventbus.api.EventDispatcher">
-		<description>
-        <![CDATA[
-            Definition of Generic EventDispatcher
-        ]]>
-		</description>
-		<constructor-arg>
-			<value>com.rgsinfotech.eventbus.event.WorkQueueServerSenderEvent
-			</value>
-		</constructor-arg>
-	</bean>
-	
 	<bean id="workQueueServerSenderListener"
 		class="com.rgsinfotech.eventbus.listener.WorkQueueServerSenderListener">
 		<property name="workQueueServerService" ref="workQueueServerService" />
@@ -62,7 +50,6 @@
 	<bean id="workInjectionService"
 		class="com.rgsinfotech.workqueue.service.WorkInjectionService"
 		init-method="init" destroy-method="shutdown">
-		<property name="workQueueServerSenderEventDispatcher" ref="workQueueServerSenderEventDispatcher" />
 		<property name="workQueueServerSenderListener" ref="workQueueServerSenderListener" />	
 	</bean>	
 			

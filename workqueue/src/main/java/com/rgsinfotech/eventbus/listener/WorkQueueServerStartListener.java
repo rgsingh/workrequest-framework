@@ -2,25 +2,32 @@ package com.rgsinfotech.eventbus.listener;
 
 import org.slf4j.LoggerFactory;
 
-import com.rgsinfotech.eventbus.event.WorkQueueServerStartEvent;
+import com.rgsinfotech.eventbus.api.EventDispatcher;
+import com.rgsinfotech.eventbus.event.Event;
+import com.rgsinfotech.eventbus.event.EventDefinitions;
 
-public class WorkQueueServerStartListener implements Listener<WorkQueueServerStartEvent> {
-	
-//	protected static class WorkQueueServerServiceHolder {
-//		public static final WorkQueueServerService<Integer> INSTANCE = new WorkQueueServerService<Integer>();
-//	}
-	
-	public void process(WorkQueueServerStartEvent event) {
-		
-//		WorkQueueServerServiceHolder.INSTANCE.init();
-		
-		System.out.println("WorkQueueServerStartEvent.createdBy: "
-				+ event.getCreatedBy() + ", WorkQueueServerStartEvent.workKey: "
+public class WorkQueueServerStartListener extends EventListener {
+
+	public WorkQueueServerStartListener() {
+	}
+
+	public void process(Event event) {
+
+		System.out.println("WorkQueueServerStartEvent.detail: "
+				+ event.getDetail() + ", WorkQueueServerStartEvent.workKey: "
 				+ event.getKey());
 
 		LoggerFactory.getLogger(getClass().getName()).debug(
-				"WorkQueueServerStartEvent.createdBy: " + event.getCreatedBy()
-						+ ", WorkQueueServerStartEvent.workKey: " + event.getKey());
+				"WorkQueueServerStartEvent.detail: " + event.getDetail()
+						+ ", WorkQueueServerStartEvent.workKey: "
+						+ event.getKey());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void init() {
+		EventDispatcher.getInstance().addListener(
+				EventDefinitions.EVENT_WORK_QUEUE_SERVER_START, this);
 	}
 
 }

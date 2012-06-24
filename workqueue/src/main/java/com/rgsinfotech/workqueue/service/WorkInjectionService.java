@@ -6,7 +6,8 @@ import java.util.List;
 import javax.naming.ServiceUnavailableException;
 
 import com.rgsinfotech.eventbus.api.EventDispatcher;
-import com.rgsinfotech.eventbus.event.WorkQueueServerSenderEvent;
+import com.rgsinfotech.eventbus.event.Event;
+import com.rgsinfotech.eventbus.event.EventDefinitions;
 import com.rgsinfotech.eventbus.listener.Listener;
 
 
@@ -21,8 +22,7 @@ import com.rgsinfotech.eventbus.listener.Listener;
  */
 public class WorkInjectionService<T> implements Service<String> {
 
-	private EventDispatcher<WorkQueueServerSenderEvent> workQueueServerSenderEventDispatcher;
-	private Listener<WorkQueueServerSenderEvent> workQueueServerSenderListener;
+	private Listener<Event> workQueueServerSenderListener;
 
 	public void init() {
 
@@ -34,20 +34,25 @@ public class WorkInjectionService<T> implements Service<String> {
 	 * 
 	 * @param data The raw DTO payload which is post-processed within this method.
 	 */
+	@SuppressWarnings("unchecked")
 	public void send(String data) throws ServiceUnavailableException {
 
-		String[] values = data.split(",");
+
+        String[] values = data.split(",");		
 		List<Integer> dataSplit = new ArrayList<Integer>();
 		for (int i = 0; i < values.length; i++) {
 			dataSplit.add(Integer.parseInt(values[i]));
 		}
 
-		getWorkQueueServerSenderEventDispatcher().addListener(
-				getWorkQueueServerSenderListener());
-
-		getWorkQueueServerSenderEventDispatcher().dispatchEvent(
-				new WorkQueueServerSenderEvent(dataSplit, getClass()
-						.getName(), "<some transaction id>"));
+		
+		//FIXME This is not going to work since "data" should be a valid EventDefinition entry.
+		//Store the state (i.e. "data") in XML backed by an XSD that defines named payloads and
+		//attributes. That XML request/response will be mapped to the message bus used to route
+		//messages throughout a system (e.g. Event Bus<=>Apache Camel=>ActiveMQ using Spring Remoting).
+		Event event = new Event(EventDefinitions.EVENT_CLIENT_REQUEST_SENT, getClass()
+				.getName());
+		event.getPayloadIdSequence().addAll(dataSplit);
+		EventDispatcher.getInstance().dispatchEvent(event);
 
 	}
 
@@ -63,21 +68,12 @@ public class WorkInjectionService<T> implements Service<String> {
 
 	}
 
-	public EventDispatcher<WorkQueueServerSenderEvent> getWorkQueueServerSenderEventDispatcher() {
-		return workQueueServerSenderEventDispatcher;
-	}
-
-	public void setWorkQueueServerSenderEventDispatcher(
-			EventDispatcher<WorkQueueServerSenderEvent> workQueueServerSenderEventDispatcher) {
-		this.workQueueServerSenderEventDispatcher = workQueueServerSenderEventDispatcher;
-	}
-
-	public Listener<WorkQueueServerSenderEvent> getWorkQueueServerSenderListener() {
+	public Listener<Event> getWorkQueueServerSenderListener() {
 		return workQueueServerSenderListener;
 	}
 
 	public void setWorkQueueServerSenderListener(
-			Listener<WorkQueueServerSenderEvent> workQueueServerSenderListener) {
+			Listener<Event> workQueueServerSenderListener) {
 		this.workQueueServerSenderListener = workQueueServerSenderListener;
 	}
 

@@ -5,9 +5,9 @@ import java.util.concurrent.BlockingQueue;
 import javax.naming.ServiceUnavailableException;
 
 import com.rgsinfotech.eventbus.api.EventDispatcher;
-import com.rgsinfotech.eventbus.event.WorkRequestEvent;
-import com.rgsinfotech.eventbus.event.WorkerThreadFailedEvent;
-import com.rgsinfotech.eventbus.listener.WorkRequestListener;
+import com.rgsinfotech.eventbus.event.Event;
+import com.rgsinfotech.eventbus.event.EventDefinitions;
+import com.rgsinfotech.eventbus.listener.WorkerThreadCompletedListener;
 import com.rgsinfotech.eventbus.listener.WorkerThreadFailedListener;
 import com.rgsinfotech.workqueue.service.Service;
 import com.rgsinfotech.workqueue.service.SomeService;
@@ -26,6 +26,7 @@ public class Worker<T> implements Runnable {
 		return name;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void run() {
 		try {
 			while (true) {
@@ -37,26 +38,28 @@ public class Worker<T> implements Runnable {
 				try {
 					someService.send(x);
 				} catch (ServiceUnavailableException e) {
-					EventDispatcher<WorkerThreadFailedEvent> dispatcher = new EventDispatcher<WorkerThreadFailedEvent>(
-							WorkerThreadFailedEvent.class);
-					dispatcher.addListener(new WorkerThreadFailedListener());
-					dispatcher.dispatchEvent(new WorkerThreadFailedEvent(
-							toString(), e.getMessage()));
+					
+					//TODO Move these out of the this class. This should be instantiated once and does not belong within this class.
+					WorkerThreadFailedListener workerFailedlistener = new WorkerThreadFailedListener();
+					
+					
+					EventDispatcher.getInstance().dispatchEvent(new Event(EventDefinitions.EVENT_WORKER_THREAD_FAILED, e.getMessage()));
 				}
 
-				EventDispatcher<WorkRequestEvent> dispatcher = new EventDispatcher<WorkRequestEvent>(
-						WorkRequestEvent.class);
-				dispatcher.addListener(new WorkRequestListener());
-				dispatcher.dispatchEvent(new WorkRequestEvent(toString(), x));
+				//TODO Move these out of the this class. This should be instantiated once and does not belong within this class.
+				WorkerThreadCompletedListener workerCompletedListener = new WorkerThreadCompletedListener();
+				
+				EventDispatcher.getInstance().dispatchEvent(new Event(EventDefinitions.EVENT_WORKER_THREAD_COMPLETED, this.getClass().getName()));
 
 				Thread.sleep(500);
 
 			}
 		} catch (InterruptedException e) {
-			EventDispatcher<WorkerThreadFailedEvent> dispatcher = new EventDispatcher<WorkerThreadFailedEvent>(
-					WorkerThreadFailedEvent.class);
-			dispatcher.addListener(new WorkerThreadFailedListener());
-			dispatcher.dispatchEvent(new WorkerThreadFailedEvent(toString(), e
+			
+			//TODO Move these out of the this class. This should be instantiated once and does not belong within this class.
+			WorkerThreadFailedListener workerFailedListener = new WorkerThreadFailedListener();			
+			
+			EventDispatcher.getInstance().dispatchEvent(new Event(EventDefinitions.EVENT_WORKER_THREAD_FAILED, e
 					.getMessage()));
 		}
 	}

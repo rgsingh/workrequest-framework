@@ -26,7 +26,8 @@ public class WorkQueueServerService<T> implements Service<T> {
 
 	private static final Integer DEFAULT_NUM_WORKERS = 2;
 	private Integer numWorkers = new Integer(DEFAULT_NUM_WORKERS);
-
+	
+	
 	public WorkQueueServerService() {
 	}
 
