@@ -10,12 +10,9 @@
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
 
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
-	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-	http://www.springframework.org/schema/context
-	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+<beans
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+			http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
 	<context:annotation-config />
 
@@ -33,24 +30,30 @@
 
 	<bean id="injectionWorkerProxy" class="com.rgsinfotech.workqueue.ui.WorkInjectionWorkerProxy"
 		init-method="init" destroy-method="cancel">
-		<property name="workInjectionService" ref="workInjectionService" />		
-	</bean>	
-	
+		<property name="workInjectionService" ref="workInjectionService" />
+	</bean>
+
 	<bean id="workQueueServerSenderListener"
 		class="com.rgsinfotech.eventbus.listener.WorkQueueServerSenderListener">
 		<property name="workQueueServerService" ref="workQueueServerService" />
 	</bean>
-	
+
 	<bean id="workQueueServerService"
 		class="com.rgsinfotech.workqueue.service.WorkQueueServerService"
 		init-method="init" destroy-method="shutdown">
 		<property name="numWorkers" value="5" />
 	</bean>
-		
-	<bean id="workInjectionService"
-		class="com.rgsinfotech.workqueue.service.WorkInjectionService"
+
+	<bean id="workInjectionService" class="com.rgsinfotech.workqueue.service.WorkInjectionService"
 		init-method="init" destroy-method="shutdown">
-		<property name="workQueueServerSenderListener" ref="workQueueServerSenderListener" />	
-	</bean>	
-			
+		<property name="workQueueServerSenderListener" ref="workQueueServerSenderListener" />
+	</bean>
+
+	<bean id="workerThreadFailedListener"
+		class="com.rgsinfotech.eventbus.listener.WorkerThreadFailedListener" />
+
+	<bean id="workerThreadCompletedListener"
+		class="com.rgsinfotech.eventbus.listener.WorkerThreadCompletedListener" />
+
+
 </beans>

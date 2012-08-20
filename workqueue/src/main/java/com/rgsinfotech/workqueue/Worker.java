@@ -1,5 +1,6 @@
 package com.rgsinfotech.workqueue;
 
+import java.rmi.RemoteException;
 import java.util.concurrent.BlockingQueue;
 
 import javax.naming.ServiceUnavailableException;
@@ -7,10 +8,8 @@ import javax.naming.ServiceUnavailableException;
 import com.rgsinfotech.eventbus.api.EventDispatcher;
 import com.rgsinfotech.eventbus.event.Event;
 import com.rgsinfotech.eventbus.event.EventDefinitions;
-import com.rgsinfotech.eventbus.listener.WorkerThreadCompletedListener;
-import com.rgsinfotech.eventbus.listener.WorkerThreadFailedListener;
 import com.rgsinfotech.workqueue.service.Service;
-import com.rgsinfotech.workqueue.service.SomeService;
+import com.rgsinfotech.workqueue.service.SimpleMultiplierService;
 
 public class Worker<T> implements Runnable {
 
@@ -34,31 +33,25 @@ public class Worker<T> implements Runnable {
 				T x = q.take();
 
 				// Delegate to a Service that does something with x;
-				Service<T> someService = new SomeService<T>();
+				Service<T> multiplierService = new SimpleMultiplierService<T>();
 				try {
-					someService.send(x);
+					try {
+						multiplierService.send(x);
+					} catch (RemoteException e) {
+						EventDispatcher.getInstance().dispatchEvent(new Event(EventDefinitions.EVENT_WORKER_THREAD_FAILED, e.getMessage()));
+					}
 				} catch (ServiceUnavailableException e) {
-					
-					//TODO Move these out of the this class. This should be instantiated once and does not belong within this class.
-					WorkerThreadFailedListener workerFailedlistener = new WorkerThreadFailedListener();
-					
 					
 					EventDispatcher.getInstance().dispatchEvent(new Event(EventDefinitions.EVENT_WORKER_THREAD_FAILED, e.getMessage()));
 				}
-
-				//TODO Move these out of the this class. This should be instantiated once and does not belong within this class.
-				WorkerThreadCompletedListener workerCompletedListener = new WorkerThreadCompletedListener();
-				
+			
 				EventDispatcher.getInstance().dispatchEvent(new Event(EventDefinitions.EVENT_WORKER_THREAD_COMPLETED, this.getClass().getName()));
 
 				Thread.sleep(500);
 
 			}
 		} catch (InterruptedException e) {
-			
-			//TODO Move these out of the this class. This should be instantiated once and does not belong within this class.
-			WorkerThreadFailedListener workerFailedListener = new WorkerThreadFailedListener();			
-			
+	
 			EventDispatcher.getInstance().dispatchEvent(new Event(EventDefinitions.EVENT_WORKER_THREAD_FAILED, e
 					.getMessage()));
 		}

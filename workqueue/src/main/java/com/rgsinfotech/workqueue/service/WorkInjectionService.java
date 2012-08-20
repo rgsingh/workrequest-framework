@@ -1,5 +1,6 @@
 package com.rgsinfotech.workqueue.service;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import com.rgsinfotech.eventbus.listener.Listener;
  */
 public class WorkInjectionService<T> implements Service<String> {
 
+	private String result;
 	private Listener<Event> workQueueServerSenderListener;
 
 	public void init() {
@@ -75,6 +77,13 @@ public class WorkInjectionService<T> implements Service<String> {
 	public void setWorkQueueServerSenderListener(
 			Listener<Event> workQueueServerSenderListener) {
 		this.workQueueServerSenderListener = workQueueServerSenderListener;
+	}
+
+	@Override
+	public String getResult() throws ServiceUnavailableException,
+			RemoteException {
+		// TODO Auto-generated method stub
+		return result;
 	}
 
 }

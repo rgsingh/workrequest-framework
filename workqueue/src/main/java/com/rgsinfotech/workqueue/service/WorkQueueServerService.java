@@ -1,5 +1,6 @@
 package com.rgsinfotech.workqueue.service;
 
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -15,6 +16,8 @@ import com.rgsinfotech.workqueue.Worker;
 
 public class WorkQueueServerService<T> implements Service<T> {
 
+	
+	private T result;
 	private static final int CAPACITY = 10;
 	private static final int NUM_WORKERS = 2;
 	private static String THREAD_PREFIX = "workqueue";
@@ -78,6 +81,11 @@ public class WorkQueueServerService<T> implements Service<T> {
 	}
 
 	public void afterPropertiesSet() throws Exception {
+	}
+
+	@Override
+	public T getResult() throws ServiceUnavailableException, RemoteException {
+		return result;
 	}
 
 }

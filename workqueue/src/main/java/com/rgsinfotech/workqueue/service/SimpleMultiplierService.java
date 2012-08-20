@@ -6,21 +6,24 @@ import javax.naming.ServiceUnavailableException;
 
 import org.slf4j.LoggerFactory;
 
-public class SomeService<T> implements Service<T> {
+public class SimpleMultiplierService<T> implements Service<T> {
 
+	private T result;
+	
 	public void init() {
 
 	}
 
 	@SuppressWarnings("unchecked")
 	public void send(T data) throws ServiceUnavailableException {
-		LoggerFactory.getLogger(getClass().getName()).debug("Data in: " + data + " in SomeService");
+		LoggerFactory.getLogger(getClass().getName()).debug("Data in: " + data + " in SimpleMultiplierService");
 		if (data instanceof Integer) {
 			Integer dataInteger = (Integer)data;
 			dataInteger *= 1000;
 			data = (T) dataInteger;
+			result = data;
 		}
-		LoggerFactory.getLogger(getClass().getName()).debug("Data out: " + data + " in SomeService");
+		LoggerFactory.getLogger(getClass().getName()).debug("Data out: " + data + " in SimpleMultiplierService");
 	}
 	
 	public void send(List<T> data) throws ServiceUnavailableException {
@@ -33,6 +36,11 @@ public class SomeService<T> implements Service<T> {
 
 	public void afterPropertiesSet() throws Exception {
 		
+	}
+
+	@Override
+	public T getResult() throws ServiceUnavailableException {
+		return result;
 	}
 
 	
