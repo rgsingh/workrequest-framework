@@ -18,6 +18,11 @@
 		<module>workqueue</module>
 		<module>xmldatabinder</module>
 		<module>bootstrap</module>
+		<module>workqueue-event</module>
+		<module>workqueue-frontend</module>
+		<module>workqueue-listener</module>
+		<module>workqueue-service</module>
+
 	</modules>
 	<build>
 		<pluginManagement>

@@ -5,7 +5,6 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import com.rgsinfotech.eventbus.api.EventDispatcher;
-import com.rgsinfotech.eventbus.event.AbstractEvent;
 import com.rgsinfotech.eventbus.event.Event;
 import com.rgsinfotech.eventbus.event.EventDefinitions;
 import com.rgsinfotech.eventbus.listener.Listener;
