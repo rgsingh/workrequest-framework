@@ -9,7 +9,6 @@
     <import resource="activemq-workqueue-broker.xml"/>
     <import resource="listeners.xml"/>
 	<import resource="services.xml"/>
-    <import resource="classpath*:swing-frontend.xml"/>
 	
 	<camel:camelContext id="camel">      
 		<camel:route>

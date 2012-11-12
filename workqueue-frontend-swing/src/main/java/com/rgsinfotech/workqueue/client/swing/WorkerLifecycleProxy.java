@@ -1,4 +1,4 @@
-package com.rgsinfotech.workqueue.client;
+package com.rgsinfotech.workqueue.client.swing;
 
 public interface WorkerLifecycleProxy {
 	
