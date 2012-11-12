@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://camel.apache.org/schema/spring"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+			http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+			
+    <!-- import the ActiveMQ broker to act as server -->
+    <import resource="classpath:activemq-broker.xml"/>
+	
+	<bean id="multiplierService"
+		class="com.rgsinfotech.workqueue.service.SimpleMultiplierService" />
+
+	<camel:camelContext id="camel">      
+		<!--  Creates a proxy to the vm:workqueueService endpoint. 
+		<camel:proxy id="workQueueServiceProxy" serviceUrl="vm:workQueueService"
+                 serviceInterface="com.rgsinfotech.workqueue.service.Service"/>	           
+		<camel:export id="workQueueService"
+			uri="vm:workQueueServiceImpl"
+			serviceRef="multiplierService" serviceInterface="com.rgsinfotech.workqueue.service.Service" />
+		-->
+		<camel:route>
+			<camel:from uri="activemq:queue:workQueueService" />
+			<camel:to uri="bean:multiplierService" />
+			<!-- <camel:to uri="vm:workQueueServiceImpl" /> -->
+		</camel:route>
+	</camel:camelContext>
+
+	<context:annotation-config />
+
+	<bean id="workQueueWindow" class="com.rgsinfotech.workqueue.ui.WorkQueueWindow"
+		init-method="show">
+		<property name="mainFrame" ref="mainFrame" />
+	</bean>
+
+	<bean id="mainFrame" class="com.rgsinfotech.workqueue.ui.MainFrame">
+		<constructor-arg index="0">
+			<value>Work Queue Injector</value>
+		</constructor-arg>
+		<property name="injectionWorkerProxy" ref="injectionWorkerProxy" />
+	</bean>
+
+	<bean id="injectionWorkerProxy" class="com.rgsinfotech.workqueue.ui.WorkInjectionWorkerProxy"
+		init-method="init" destroy-method="cancel">
+		<property name="workInjectionService" ref="workInjectionService" />
+	</bean>
+
+	<bean id="workQueueServerSenderListener"
+		class="com.rgsinfotech.eventbus.listener.WorkQueueServerSenderListener">
+		<property name="workQueueServerService" ref="workQueueServerService" />
+	</bean>
+
+	<bean id="workQueueServerService"
+		class="com.rgsinfotech.workqueue.service.WorkQueueServerService"
+		init-method="init" destroy-method="shutdown">
+		<property name="numWorkers" value="5" />
+	</bean>
+
+	<bean id="workInjectionService" class="com.rgsinfotech.workqueue.service.WorkInjectionService"
+		init-method="init" destroy-method="shutdown">
+		<property name="workQueueServerSenderListener" ref="workQueueServerSenderListener" />
+	</bean>
+
+	<bean id="workerThreadFailedListener"
+		class="com.rgsinfotech.eventbus.listener.WorkerThreadFailedListener" />
+
+	<bean id="workerThreadCompletedListener"
+		class="com.rgsinfotech.eventbus.listener.WorkerThreadCompletedListener" />
+
+</beans>

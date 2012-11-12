@@ -7,25 +7,15 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.rgsinfotech</groupId>
-  <artifactId>workqueue-service</artifactId>
+  <artifactId>workqueue-frontend-swing</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>workqueue-service</name>
+  <name>workqueue-frontend-swing</name>
   <dependencies>
     <dependency>
       <groupId>com.rgsinfotech</groupId>
-      <artifactId>eventbus</artifactId>
+      <artifactId>workqueue-listener</artifactId>
       <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>com.rgsinfotech</groupId>
-      <artifactId>workqueue-event</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>com.rgsinfotech</groupId>
-      <artifactId>workqueue-service-remote</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>          
-  </dependencies>
+    </dependency>    
+  </dependencies>    
 </project>
