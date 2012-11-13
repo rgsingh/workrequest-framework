@@ -1,4 +1,4 @@
-package com.rgsinfotech.xmldatabinder;
+package com.rgsinfotech.model;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
