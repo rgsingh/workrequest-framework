@@ -8,10 +8,10 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.rgsinfotech</groupId>
-	<artifactId>workqueue-frontend-webapp</artifactId>
+	<artifactId>workgen</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>workqueue-frontend-webapp</name>
+	<name>workgen</name>
 	<dependencies>
 		<dependency>
 			<groupId>com.rgsinfotech</groupId>

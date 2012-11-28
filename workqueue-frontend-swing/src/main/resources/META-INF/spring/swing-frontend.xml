@@ -13,14 +13,18 @@
 	
 	<bean id="workQueueWindow" class="com.rgsinfotech.workqueue.client.swing.WorkQueueWindow"
 		init-method="show">
-		<property name="mainFrame" ref local="mainFrame" />
+		<property name="mainFrame">
+		   <ref local="mainFrame"/>
+		</property>
 	</bean>
 
 	<bean id="mainFrame" class="com.rgsinfotech.workqueue.client.swing.MainFrame">
 		<constructor-arg index="0">
 			<value>Work Queue Injector</value>
 		</constructor-arg>
-		<property name="injectionWorkerProxy" ref local="injectionWorkerProxy" />
+		<property name="injectionWorkerProxy">
+		   <ref local="injectionWorkerProxy" />
+		</property>
 	</bean>
 
 	<bean id="injectionWorkerProxy" class="com.rgsinfotech.workqueue.client.swing.WorkInjectionWorkerProxy"
