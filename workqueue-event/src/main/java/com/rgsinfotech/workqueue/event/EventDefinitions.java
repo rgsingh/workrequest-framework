@@ -13,6 +13,5 @@ public class EventDefinitions {
 	public static final String EVENT_WORK_QUEUE_SERVER_RESULT_RETRYING = "com/rgsinfotech/event/workQueueServerResult/retrying";
 	public static final String EVENT_WORK_QUEUE_SERVER_RESULT_CANCELLED = "com/rgsinfotech/event/workQueueServerResult/cancelled";
 
-	public static final String EVENT_WORK_QUEUE_SERVER_SENDER = "com/rgsinfotech/event/workQueueServerSender";
 	public static final String EVENT_WORK_QUEUE_SERVER_START = "com/rgsinfotech/event/workQueueServerStart";
 }

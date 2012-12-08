@@ -8,7 +8,7 @@ import javax.naming.ServiceUnavailableException;
 import com.rgsinfotech.eventbus.api.EventDispatcher;
 import com.rgsinfotech.eventbus.event.Event;
 import com.rgsinfotech.workqueue.event.EventDefinitions;
-import com.rgsinfotech.workqueue.service.Service;
+import com.rgsinfotech.workqueue.remote.service.Service;
 import com.rgsinfotech.workqueue.service.SimpleMultiplierService;
 
 public class Worker<T> implements Runnable {
@@ -35,11 +35,8 @@ public class Worker<T> implements Runnable {
 				// Delegate to a Service that does something with x;
 				Service<T> multiplierService = new SimpleMultiplierService<T>();
 				try {
-					try {
-						multiplierService.send(x);
-					} catch (RemoteException e) {
-						EventDispatcher.getInstance().dispatchEvent(new Event(EventDefinitions.EVENT_WORKER_THREAD_FAILED, e.getMessage()));
-					}
+					multiplierService.send(x);
+
 				} catch (ServiceUnavailableException e) {
 					
 					EventDispatcher.getInstance().dispatchEvent(new Event(EventDefinitions.EVENT_WORKER_THREAD_FAILED, e.getMessage()));

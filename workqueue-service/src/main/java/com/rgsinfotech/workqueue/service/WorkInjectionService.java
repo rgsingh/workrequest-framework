@@ -9,6 +9,7 @@ import javax.naming.ServiceUnavailableException;
 import com.rgsinfotech.eventbus.api.EventDispatcher;
 import com.rgsinfotech.eventbus.event.Event;
 import com.rgsinfotech.workqueue.event.EventDefinitions;
+import com.rgsinfotech.workqueue.remote.service.Service;
 import com.rgsinfotech.eventbus.listener.Listener;
 
 
@@ -75,9 +76,7 @@ public class WorkInjectionService<T> implements Service<String> {
 	}
 
 	@Override
-	public String getResult() throws ServiceUnavailableException,
-			RemoteException {
-		// TODO Auto-generated method stub
+	public String getResult() throws ServiceUnavailableException {
 		return result;
 	}
 

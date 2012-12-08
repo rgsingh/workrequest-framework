@@ -11,7 +11,7 @@ import org.springframework.beans.factory.InitializingBean;
 import com.rgsinfotech.eventbus.api.EventDispatcher;
 import com.rgsinfotech.eventbus.event.Event;
 import com.rgsinfotech.workqueue.event.EventDefinitions;
-import com.rgsinfotech.workqueue.service.Service;
+import com.rgsinfotech.workqueue.remote.service.Service;
 
 public class WorkQueueServerSenderListener extends
 		EventListener implements InitializingBean   {
@@ -39,9 +39,7 @@ public class WorkQueueServerSenderListener extends
 			
 		} catch (ServiceUnavailableException e) {
 			LoggerFactory.getLogger(getClass().getName()).error(e.getMessage());
-		} catch (RemoteException e) {
-			LoggerFactory.getLogger(getClass().getName()).error(e.getMessage());
-		}
+		} 
 		
 	}
 

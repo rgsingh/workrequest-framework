@@ -16,7 +16,7 @@
     <camelContext xmlns="http://camel.apache.org/schema/spring">
 		<!--  Creates a proxy to the activemq:queue:workQueueService endpoint. -->
 		<proxy id="workQueueServiceProxy" 
-                 serviceInterface="com.rgsinfotech.workqueue.service.Service"
+                 serviceInterface="com.rgsinfotech.workqueue.remote.service.Service"
                  serviceUrl="activemq:queue:workQueueService"/>
 	</camelContext>
 </beans>

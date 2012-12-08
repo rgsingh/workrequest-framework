@@ -1,6 +1,6 @@
 package com.rgsinfotech.workqueue.client.swing;
 
-import com.rgsinfotech.workqueue.service.Service;
+import com.rgsinfotech.workqueue.remote.service.Service;
 
 /*
  * Wraps a SwingWorker (WorkInjectionWorker) to handle UI event handling and dispatch.

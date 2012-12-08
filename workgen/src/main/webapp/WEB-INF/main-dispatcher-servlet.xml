@@ -10,32 +10,16 @@
         http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
 	<context:component-scan base-package="com.rgsinfotech.main.controller" />
-
+	
 	<mvc:annotation-driven />
 
-	<!-- Map returned view name "rssViewer" to bean id "rssViewer" 
-	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
-	
-	<bean id="xmlViewer" 
-		class="org.springframework.web.servlet.view.xml.MarshallingView">
-		<constructor-arg>
-			<bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
-				<property name="classesToBeBound">
-					<list>
-						<value>com.mkyong.common.model.Coffee</value>
-					</list>
-				</property>
-			</bean>
-		</constructor-arg>
+	<bean class="org.springframework.web.servlet.view.XmlViewResolver">
+		<property name="location" value="/WEB-INF/redirect-views.xml"/>
 	</bean>
-	-->
+
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix">
-			<value>/WEB-INF/jsp/</value>
-		</property>
-		<property name="suffix">
-			<value>.jsp</value>
-		</property>
+		<property name="prefix" value="/WEB-INF/jsp/"/>
+		<property name="suffix" value=".jsp"/>
 	</bean>
 </beans>

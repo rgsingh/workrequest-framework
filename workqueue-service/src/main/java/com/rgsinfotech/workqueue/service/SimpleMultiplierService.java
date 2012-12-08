@@ -6,6 +6,8 @@ import javax.naming.ServiceUnavailableException;
 
 import org.slf4j.LoggerFactory;
 
+import com.rgsinfotech.workqueue.remote.service.Service;
+
 public class SimpleMultiplierService<T> implements Service<T> {
 
 	private T result;

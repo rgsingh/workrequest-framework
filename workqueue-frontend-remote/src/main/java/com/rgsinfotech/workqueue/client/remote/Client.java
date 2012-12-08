@@ -6,7 +6,7 @@ import javax.naming.ServiceUnavailableException;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.rgsinfotech.workqueue.service.Service;
+import com.rgsinfotech.workqueue.remote.service.Service;
 
 public class Client {
 	
@@ -15,13 +15,22 @@ public class Client {
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("META-INF/spring/activemq-workqueue-frontend.xml");
 		ctx.start();
 		
-		@SuppressWarnings("unchecked")
-		Service<Integer> service = (Service<Integer>) ctx.getBean("workQueueServiceProxy");
+		try {
+			@SuppressWarnings("unchecked")
+			Service<Integer> service = (Service<Integer>) ctx.getBean("workQueueServiceProxy");
 
-		System.out.println("Calling service...");
-		service.send(new Integer(45));
-		System.out.println("Service call result... " + service.getResult());
-		System.out.println("Service call done.");
+			System.out.println("Calling service...");
+			service.send(new Integer(450000000));
+			System.out.println("Service call result... " + service.getResult());
+			System.out.println("Service call done.");
+		} catch (Exception e) {
+			System.out.println("Problem calling service send method : " + e.getMessage()); // just for testing anyway.
+		} finally {
+			if (ctx != null) {
+				ctx.stop();				
+			}
+		}
+		
 		
 	}
 

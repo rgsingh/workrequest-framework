@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.rgsinfotech.workqueue.LoggingThreadFactory;
 import com.rgsinfotech.workqueue.Worker;
+import com.rgsinfotech.workqueue.remote.service.Service;
 
 public class WorkQueueServerService<T> implements Service<T> {
 
@@ -84,7 +85,7 @@ public class WorkQueueServerService<T> implements Service<T> {
 	}
 
 	@Override
-	public T getResult() throws ServiceUnavailableException, RemoteException {
+	public T getResult() throws ServiceUnavailableException {
 		return result;
 	}
 

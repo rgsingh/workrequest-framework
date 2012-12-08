@@ -7,7 +7,7 @@ import javax.swing.SwingWorker;
 
 import org.slf4j.LoggerFactory;
 
-import com.rgsinfotech.workqueue.service.Service;
+import com.rgsinfotech.workqueue.remote.service.Service;
 
 /*
  * This class can only be executed once. A new instance will need to be 
@@ -35,11 +35,6 @@ public class WorkInjectionWorker extends SwingWorker<Void, Void> {
 					.getLogger(getClass().getName())
 					.error("WorkInjectionWorker error sending data to WorkInjectionService.",
 							e);
-		} catch (RemoteException e) {
-			LoggerFactory
-			.getLogger(getClass().getName())
-			.error("WorkInjectionWorker error sending data to WorkInjectionService.",
-					e);
 		}
 
 	}
