@@ -7,10 +7,10 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.rgsinfotech</groupId>
-  <artifactId>workqueue-service</artifactId>
+  <artifactId>workqueue-dispatcher</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>workqueue-service</name>
+  <name>workqueue-dispatcher</name>
   <dependencies>
     <dependency>
       <groupId>com.rgsinfotech</groupId>
@@ -24,7 +24,7 @@
     </dependency>
     <dependency>
       <groupId>com.rgsinfotech</groupId>
-      <artifactId>workqueue-service-remote</artifactId>
+      <artifactId>workqueue-dispatcher-remote</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>          
   </dependencies>

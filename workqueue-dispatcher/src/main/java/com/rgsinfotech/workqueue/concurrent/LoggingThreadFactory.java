@@ -1,4 +1,4 @@
-package com.rgsinfotech.workqueue;
+package com.rgsinfotech.workqueue.concurrent;
 
 import java.util.concurrent.ThreadFactory;
 

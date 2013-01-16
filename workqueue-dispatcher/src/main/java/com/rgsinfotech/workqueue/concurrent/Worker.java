@@ -1,4 +1,4 @@
-package com.rgsinfotech.workqueue;
+package com.rgsinfotech.workqueue.concurrent;
 
 import java.rmi.RemoteException;
 import java.util.concurrent.BlockingQueue;

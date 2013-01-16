@@ -1,6 +1,5 @@
 package com.rgsinfotech.workqueue.service;
 
-import java.rmi.RemoteException;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -11,8 +10,8 @@ import javax.naming.ServiceUnavailableException;
 
 import org.slf4j.LoggerFactory;
 
-import com.rgsinfotech.workqueue.LoggingThreadFactory;
-import com.rgsinfotech.workqueue.Worker;
+import com.rgsinfotech.workqueue.concurrent.LoggingThreadFactory;
+import com.rgsinfotech.workqueue.concurrent.Worker;
 import com.rgsinfotech.workqueue.remote.service.Service;
 
 public class WorkQueueServerService<T> implements Service<T> {

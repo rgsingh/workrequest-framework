@@ -1,4 +1,4 @@
-package com.rgsinfotech.workqueue;
+package com.rgsinfotech.workqueue.bootstrap;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

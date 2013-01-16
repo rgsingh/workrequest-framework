@@ -7,8 +7,8 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.rgsinfotech</groupId>
-  <artifactId>workqueue-service-remote</artifactId>
+  <artifactId>workqueue-dispatcher-remote</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>workqueue-service-remote</name>
+  <name>workqueue-dispatcher-remote</name>
 </project>

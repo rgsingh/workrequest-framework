@@ -8,6 +8,14 @@ import org.slf4j.LoggerFactory;
 
 import com.rgsinfotech.workqueue.remote.service.Service;
 
+/*
+ *  FIXME This is contrived and should really be something generic like a CXF Web Service invoker 
+ *  or a Camel Route invoker.
+ *  
+ *  TODO
+ *  T result should hold an ack for an async Service<T> and a response for a sync Service<T>
+ *  (e.g. A sync service would block with a timeout and never indefinitely block). 
+ */
 public class SimpleMultiplierService<T> implements Service<T> {
 
 	private T result;

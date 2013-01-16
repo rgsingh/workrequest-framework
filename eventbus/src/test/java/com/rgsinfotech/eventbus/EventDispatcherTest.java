@@ -1,8 +1,19 @@
 package com.rgsinfotech.eventbus;
 
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.concurrent.ConcurrentHashMap;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 import com.rgsinfotech.eventbus.api.EventDispatcher;
 import com.rgsinfotech.eventbus.event.Event;
@@ -10,28 +21,74 @@ import com.rgsinfotech.eventbus.event.EventDefinitions;
 import com.rgsinfotech.eventbus.listener.Listener;
 
 /**
+ * TODO Integrate with Spring Framework, Mockito and Powermock
  * Unit test for EventDispatcher.
  */
+@RunWith(MockitoJUnitRunner.class)
 public class EventDispatcherTest extends TestCase {
-	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *            name of the test case
-	 */
-	public EventDispatcherTest(String testName) {
-		super(testName);
+	
+	@Mock
+	ConcurrentHashMap<String, Listener<Event>> mockEventListeners;
+	
+	@Mock
+	Listener<Event> mockEventListener;	
+	
+	public EventDispatcherTest() {
+		
 	}
 
-	/**
-	 * @return the suite of tests being tested
-	 */
 	public static Test suite() {
 		return new TestSuite(EventDispatcherTest.class);
 	}
 
+	private String addedKey() { return "MY_LISTENER_KEY"; }
+ 	
+	
 	@SuppressWarnings("unchecked")
-	public void testMainSuccess() {
+	@org.junit.Test
+	public void testAddValidListener(){
+		
+		// given (the put method will return void. We are asserting in the callback of Answer which is the "then" part of out given-when-then template)
+		when(mockEventListeners.put(addedKey(), mockEventListener)).thenAnswer(new Answer<Void>(){
+			@Override
+			public Void answer(InvocationOnMock invocation) throws Throwable {
+				// then
+				Object[] args = invocation.getArguments();
+				assertEquals(addedKey(), (String)args[0]);
+				assertEquals("mockEventListener", ((Listener<Event>)args[1]).toString());
+	            return null;
+			}});
+		EventDispatcher.getInstance().setListeners(mockEventListeners);
+		
+		// when 
+		EventDispatcher.getInstance().addListener(
+				addedKey(), mockEventListener);
+		
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	@org.junit.Test
+	public void testRemoveValidListener(){
+		
+		// given
+		EventDispatcher.getInstance().setListeners(mockEventListeners);
+		EventDispatcher.getInstance().addListener(
+				addedKey(), mockEventListener);
+		int expectedListenersSize = 0;
+		
+		// when
+		EventDispatcher.getInstance().removeListener(addedKey());
+		
+		// then
+		assertEquals(expectedListenersSize, mockEventListeners.size());
+		
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	@org.junit.Test
+	public void testDispatchEvent() {
 
 		// Typically instantiated once upon system initialization and maintained
 		// until termination of the system.

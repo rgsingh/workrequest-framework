@@ -1,0 +1,3 @@
+Should probably rename workqueue-service to workqueue-daemon since these are meant to be separate daemon class
+instances running within their own thread pools. workqueue-service should be used as the "Service" layer for DAO
+objects (e.g. workqueue-service uses workqueue-model =>  workqueue-dao uses workqueue-model).

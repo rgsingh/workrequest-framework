@@ -1,6 +1,5 @@
 package com.rgsinfotech.workqueue.service;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,9 +7,9 @@ import javax.naming.ServiceUnavailableException;
 
 import com.rgsinfotech.eventbus.api.EventDispatcher;
 import com.rgsinfotech.eventbus.event.Event;
+import com.rgsinfotech.eventbus.listener.Listener;
 import com.rgsinfotech.workqueue.event.EventDefinitions;
 import com.rgsinfotech.workqueue.remote.service.Service;
-import com.rgsinfotech.eventbus.listener.Listener;
 
 
 /**
