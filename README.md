@@ -11,3 +11,9 @@ workqueue-frontend-swing - a simple Swing app to inject data through the event b
 workqueue-frontend-remote - a remote proxy to a service which dispatches events over the event bus.
 
 mvn clean install
+
+TODO
+* Re-organize and consolidate modules and namespacing
+* Give more meaningful names to modules
+* Implement front end with Backbone.js
+* Meh. Start over with something totally different.
